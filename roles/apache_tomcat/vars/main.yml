@@ -1,0 +1,7 @@
+tomcat_group: tomcat
+tomcat_user: tomcat
+tar_file: apache-tomcat-8.5.9
+home_dir: /opt/tomcat
+tomcat_v: tomcat-8
+t_version: v8.5.9
+war_file: sample.war

@@ -1,0 +1,6 @@
+- name: start apache
+  service: name=httpd state=restarted
+
+- name: start nginx
+  service: name=nginx state=restarted
+

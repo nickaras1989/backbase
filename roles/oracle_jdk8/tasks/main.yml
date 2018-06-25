@@ -1,0 +1,38 @@
+---
+# tasks file for jdk
+
+- name: Download JDK
+  get_url:
+     url: "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/{{jdk_tar}}.tar.gz" 
+     dest: "/tmp/{{jdk_tar}}.tar.gz"
+     headers: 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'
+
+- name: Ensure JDK directory exists
+  file: path=/usr/lib/jdk state=directory
+
+- name: untar jdk
+  unarchive:
+    src: /tmp/{{jdk_tar}}.tar.gz
+    dest: /usr/lib/jdk/
+    copy: no
+
+- name: correct java version selected
+  alternatives: name={{ item.name }} link={{ item.link }} path={{ item.path }}
+  with_items:
+    - { name: java, link: /usr/bin/java, path: "/usr/lib/jdk/{{jdk_v}}/bin/java" }
+    - { name: javac, link: /usr/bin/javac, path: "/usr/lib/jdk/{{jdk_v}}/bin/javac" }
+
+
+- name: check if jdk is already set in /etc/profile
+  shell: grep jdk1.8 /etc/profile
+  register: parameter
+  ignore_errors: yes
+
+- name: set JAVA_OPTS value to make it available for all users
+  lineinfile: dest="/etc/profile"
+               insertafter=EOF
+               line='export JAVA_HOME="/usr/lib/jdk/{{jdk_v}}/" export PATH=$JAVA_HOME/bin:$PATH '
+               state=present
+  when: parameter.rc == 1
+
+

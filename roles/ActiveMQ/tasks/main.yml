@@ -1,0 +1,23 @@
+- name: make dir for ActiveMq
+  file: path={{home_dir}} state=directory
+
+- name: download the tar file
+  get_url: url=https://archive.apache.org/dist/activemq/{{version}}/{{tar_file}}-bin.tar.gz dest=/tmp
+
+- name: extract the files
+  unarchive: src=/tmp/{{tar_file}}-bin.tar.gz dest=/tmp
+
+#- name: move the content to {{home_dir}}
+#  copy: src=/tmp/{{tar_file}} dest=/opt/ActiveMQ remote_src=yes directory_mode=yes recursive=true
+
+- name: move the content to {{home_dir}}
+  shell: "mv /tmp/{{tar_file}}/* {{home_dir}}"
+
+- name: copy the service file
+  template: src=activemq.service dest=/etc/systemd/system/activemq.service
+
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: start activemq
+  service: name=activemq state=started
