@@ -20,4 +20,4 @@ An activemq.service file is stored in the templates to start ActiveMQ as a servi
 
 4. cd opt]$   ansible-playbook playbooks/jdk.yml -i inventory/dev.ini
 to install oracle JDK8 and set JAVA_HOME for all users
-
+    
