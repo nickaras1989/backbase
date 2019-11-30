@@ -25,8 +25,3 @@ to install oracle JDK8 and set JAVA_HOME for all users
 New change some code
 
 
-
-Minal
-Hi
-New code
-some cnanheds
